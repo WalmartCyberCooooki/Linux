@@ -1,0 +1,506 @@
+#!/bin/bash
+# Copyright Rahul Datta 
+#LICENSCED MIT
+#Linux
+
+#sed -i '' 's/\PA.*/P/' file.txt
+#sed -i '' 's/PA/&  90/' file.txt
+
+
+##Messages
+ErrMsg(){
+    tput setaf 1; echo "$1"
+}
+ConfMsg(){
+    tput setaf 1; echo "$1"
+}
+SuccMsg(){
+    tput setaf 51; echo "$1 was succesful!!"
+}
+
+
+##EVERYTHING
+Itall(){
+    GetItAll; SuccMsg GetItAll
+    Pass; SuccMsg Pass
+    Firewall; SuccMsg Firewall
+    RemoveItALLL; SuccMsg RemoveItALLL
+    Systemcheck; SuccMsg Systemcheck
+    BadMalware; SuccMsg Systemcheck
+    Manual; SuccMsg Manual
+    After; SuccMsg Aftesr
+}
+
+##Menu
+##TODO
+
+
+
+##Install important packages
+GetItAll(){
+    apt install ufw -y 
+    apt install libpam-cracklib -y 
+    apt install -y 
+    apt update firefox -y 
+    apt install -y 
+    apt install -y 
+    apt install -y 
+    apt update 
+    apt upgrade -y
+}
+
+
+
+##All Passwords
+Pass(){
+    PassSettings=file.txt
+    #PassSettings=/etc/login.defs
+    sed -i '' 's/\PASS_MIN_DAYS.*/PASS_MIN_DAYS/' $PassSettings
+    sed -i '' 's/PASS_MIN_DAYS/&  7/' $PassSettings
+    sed -i '' 's/\PASS_MAX_DAYS.*/PASS_MAX_DAYS/' $PassSettings
+    sed -i '' 's/PASS_MAX_DAYS/&  90/' $PassSettings
+    sed -i '' 's/\PASS_WARN_AGE.*/PASS_WARN_AGE/' $PassSettings
+    sed -i '' 's/PASS_WARN_AGE/&  7/' $PassSettings
+    
+    ##Guest
+    echo "allow-guest=false" >> /etc/lightdm/lightdm.conf
+    echo "Pass all done"
+   ##CHECK https://linuxize.com/post/how-to-enable-and-disable-root-user-account-in-ubuntu/
+
+}
+
+
+##Firewall/Network 
+Firewall(){
+    ##Firewall
+    ufw 
+
+    ##Protocols
+    ##ssh
+    SshSettings=/etc/ssh/sshd_config
+    chown root:root $SshSettings
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 0644 {} \;
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
+    sed -i 's/\PasswordAuthentication.*/PasswordAuthentication/' $SshSettings
+    sed -i 's/PasswordAuthentication/&  no/' $SshSettings
+    sed -i 's/\PermitRootLogin.*/PermitRootLogin/' $SshSettings
+    sed -i 's/PermitRootLogin/&  no/' $SshSettings
+    sed -i 's/\AddressFamily.*/AddressFamily/' $SshSettings
+    sed -i 's/AddressFamily/&  inet/' $SshSettings
+    sed -i 's/\X11Forwarding.*/X11Forwarding/' $SshSettings
+    sed -i 's/X11Forwarding/&  no/' $SshSettings
+    sed -i 's/\MaxAuthTries.*/MaxAuthTries/' $SshSettings
+    sed -i 's/MaxAuthTries/&  4/' $SshSettings
+    sed -i 's/\IgnoreRhosts.*/IgnoreRhosts/' $SshSettings
+    sed -i 's/IgnoreRhosts/&  yes/' $SshSettings
+    sed -i 's/HostbasedAuthentication\.*/HostbasedAuthentication/' $SshSettings
+    sed -i 's/HostbasedAuthentication/&  no/' $SshSettings
+    sed -i 's/permitemptypasswords\.*/permitemptypasswords/' $SshSettings
+    sed -i 's/permitemptypasswords/&  no/' $SshSettings
+    sed -i 's/permituserenvironment\.*/permituserenvironment/' $SshSettings
+    sed -i 's/permituserenvironment/&  no/' $SshSettings
+    sed -i 's/Ciphers\.*/Ciphers/' $SshSettings
+    sed -i 's/Ciphers/&  chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr/' $SshSettings
+    sed -i 's/MACs\.*/MACs/' $SshSettings
+    sed -i 's/MACs/&   hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256/' $SshSettings
+    sed -i 's/KexAlgorithms\.*/KexAlgorithms/' $SshSettings
+    sed -i 's/KexAlgorithms/&   curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellmangroup14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffiehellman-group-exchange-sha256/' $SshSettings
+    sed -i 's/UsePAM\.*/UsePAM/' $SshSettings
+    sed -i 's/UsePAM &  yes/' $SshSettings
+    sed -i 's/AllowTcpForwarding\.*/AllowTcpForwarding/' $SshSettings
+    sed -i 's/AllowTcpForwarding/&  no/' $SshSettings
+    sed -i 's/MaxSessions\.*/MaxSessions/' $SshSettings
+    sed -i 's/MaxSessions/&  4/' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    sed -i 's/\.*//' $SshSettings
+    sed -i 's//&  /' $SshSettings
+    
+    PAM=/etc/security/pwquality.conf
+    sed -i 's/\.*//' $PAM
+    sed -i 's//&  /' $PAM
+    sed -i 's/\.*//' $PAM
+    sed -i 's//&  /' $PAM
+    sed -i 's/\.*//' $PAM
+    sed -i 's//&  /' $PAM
+    sed -i 's/\.*//' $PAM
+    sed -i 's//&  /' $PAM
+    sed -i 's/\.*//' $PAM
+    sed -i 's//&  /' $PAM
+
+    ##Random stuff
+    echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+    echo "0" > /proc/sys/net/ipv4/ip_forward
+    echo "nospoof on" >> /etc/host.conf
+
+    ##permanent ipv6 disable 
+    echo "0" >> /etc/sysctl.conf 
+    sudo passwd -l root
+
+    #Secure Shadow
+    chmod 640 /etc/shadow
+}
+
+
+##Check for bad files
+RemoveItALLL(){
+    ErrMsg "DO YOU REALLY WANT TOOOO"
+    read -r var
+    if [ "$var" = yesss ]
+    then
+        echo "it all"
+        for i in "*.mp3" "*.mp4" "*.avi" "*.mpg" "*.mpeg" "*.webm" "*.png" "*.gif" "*.jpeg" "*.jpg"  "*.tiff" "*.pdf" "*.exe" "*.dat" "*.flac" "*.m4a" "*.ogg" "*.flv"  ; do find ./. -name $i -exec rm {} \; ; done
+    fi
+}
+
+##Remove Malware
+BadMalware(){
+    apt list --installed | xargs 
+    sudo apt-get -y purge samba
+    sudo apt-get -y purge ophcrack
+    sudo apt-get -y purge hydra
+    sudo apt-get -y purge hydra-gtk
+    sudo apt-get -y purge telnet
+    sudo apt-get -y purge netcat
+    sudo apt-get -y purge john
+    sudo apt-get -y purge nmap
+    sudo apt-get -y purge zenmap
+    sudo apt-get -y purge metasploit
+    sudo apt-get -y purge nginx
+    sudo apt-get -y purge freeciv-server
+    sudo apt-get -y purge acccheck
+    sudo apt-get -y purge ace-voip
+    sudo apt-get -y purge amap
+    sudo apt-get -y purge automater
+    sudo apt-get -y purge braa
+    sudo apt-get -y purge casefile
+    sudo apt-get -y purge cdpsnarf
+    sudo apt-get -y purge cisco-torch
+    sudo apt-get -y purge cookie-cadger
+    sudo apt-get -y purge copy-router-config
+    sudo apt-get -y purge dmitry
+    sudo apt-get -y purge dnmap
+    sudo apt-get -y purge dnsenum
+    sudo apt-get -y purge dnsmap
+    sudo apt-get -y purge dnsrecon
+    sudo apt-get -y purge dnstracer
+    sudo apt-get -y purge dnswalk
+    sudo apt-get -y purge dotdotpwn
+    sudo apt-get -y purge enum4linux
+    sudo apt-get -y purge enumiax
+    sudo apt-get -y purge exploitdb
+    sudo apt-get -y purge fierce
+    sudo apt-get -y purge firewalk
+    sudo apt-get -y purge fragroute
+    sudo apt-get -y purge fragrouter
+    sudo apt-get -y purge ghost-phisher
+    sudo apt-get -y purge golismero
+    sudo apt-get -y purge goofile
+    sudo apt-get -y purge lbd
+    sudo apt-get -y purge maltego-teeth
+    sudo apt-get -y purge masscan
+    sudo apt-get -y purge metagoofil
+    sudo apt-get -y purge minetest
+    sudo apt-get -y purge endless-sky
+    sudo apt-get -y purge miranda
+    sudo apt-get -y purge p0f
+    sudo apt-get -y purge parsero
+    sudo apt-get -y purge recon-ng
+    sudo apt-get -y purge set
+    sudo apt-get -y purge smtp-user-enum
+    sudo apt-get -y purge snmpcheck
+    sudo apt-get -y purge sslcaudit
+    sudo apt-get -y purge sslsplit
+    sudo apt-get -y purge sslstrip
+    sudo apt-get -y purge sslyze
+    sudo apt-get -y purge thc-ipv6
+    sudo apt-get -y purge theharvester
+    sudo apt-get -y purge tlssled
+    sudo apt-get -y purge twofi
+    sudo apt-get -y purge urlcrazy
+    sudo apt-get -y purge wireshark
+    sudo apt-get -y purge wol-e
+    sudo apt-get -y purge xplico
+    sudo apt-get -y purge ismtp
+    sudo apt-get -y purge intrace
+    sudo apt-get -y purge hping3
+    sudo apt-get -y purge bed
+    sudo apt-get -y purge cisco-auditing-tool
+    sudo apt-get -y purge cisco-global-exploiter
+    sudo apt-get -y purge cisco-ocs
+    sudo apt-get -y purge cisco-torch
+    sudo apt-get -y purge copy-router-config
+    sudo apt-get -y purge doona
+    sudo apt-get -y purge greenbone-security-assistant
+    sudo apt-get -y purge hexorbase
+    sudo apt-get -y purge jsql
+    sudo apt-get -y purge lynis
+    sudo apt-get -y purge nmap
+    sudo apt-get -y purge ohrwurm
+    sudo apt-get -y purge openvas-administrator
+    sudo apt-get -y purge openvas-cli
+    sudo apt-get -y purge openvas-manager
+    sudo apt-get -y purge openvas-scanner
+    sudo apt-get -y purge oscanner
+    sudo apt-get -y purge powerfuzzer
+    sudo apt-get -y purge sfuzz
+    sudo apt-get -y purge sidguesser
+    sudo apt-get -y purge siparmyknife
+    sudo apt-get -y purge sqlmap
+    sudo apt-get -y purge sqlninja
+    sudo apt-get -y purge sqlsus
+    sudo apt-get -y purge thc-ipv6
+    sudo apt-get -y purge tnscmd10g
+    sudo apt-get -y purge unix-privesc-check
+    sudo apt-get -y purge yersinia
+    sudo apt-get -y purge asleap
+    sudo apt-get -y purge bluelog
+    sudo apt-get -y purge blueranger
+    sudo apt-get -y purge bluesnarfer
+    sudo apt-get -y purge bully
+    sudo apt-get -y purge cowpatty
+    sudo apt-get -y purge crackle
+    sudo apt-get -y purge eapmd5pass
+    sudo apt-get -y purge fern-wifi-cracker
+    sudo apt-get -y purge ghost-phisher
+    sudo apt-get -y purge giskismet
+    sudo apt-get -y purge kalibrate-rtl
+    sudo apt-get -y purge killerbee
+    sudo apt-get -y purge kismet
+    sudo apt-get -y purge mdk3
+    sudo apt-get -y purge mfcuk
+    sudo apt-get -y purge mfoc
+    sudo apt-get -y purge mfterm
+    sudo apt-get -y purge multimon-ng
+    sudo apt-get -y purge pixiewps
+    sudo apt-get -y purge reaver
+    sudo apt-get -y purge redfang
+    sudo apt-get -y purge rtlsdr-scanner
+    sudo apt-get -y purge spooftooph
+    sudo apt-get -y purge wifi-honey
+    sudo apt-get -y purge wifitap
+    sudo apt-get -y purge wifite
+    sudo apt-get -y purge arachni
+    sudo apt-get -y purge bbqsql
+    sudo apt-get -y purge blindelephant
+    sudo apt-get -y purge burpsuite
+    sudo apt-get -y purge cutycapt
+    sudo apt-get -y purge davtest
+    sudo apt-get -y purge deblaze
+    sudo apt-get -y purge dirb
+    sudo apt-get -y purge dirbuster
+    sudo apt-get -y purge fimap
+    sudo apt-get -y purge funkload
+    sudo apt-get -y purge grabber
+    sudo apt-get -y purge jboss-autopwn
+    sudo apt-get -y purge joomscan
+    sudo apt-get -y purge maltego-teeth
+    sudo apt-get -y purge padbuster
+    sudo apt-get -y purge paros
+    sudo apt-get -y purge parsero
+    sudo apt-get -y purge plecost
+    sudo apt-get -y purge proxystrike
+    sudo apt-get -y purge sfuzz
+    sudo apt-get -y purge recon-ng
+    sudo apt-get -y purge skipfish
+    sudo apt-get -y purge ua-tester
+    sudo apt-get -y purge uniscan
+    sudo apt-get -y purge vega
+    sudo apt-get -y purge w3af
+    sudo apt-get -y purge webscarab
+    sudo apt-get -y purge websploit
+    sudo apt-get -y purge wfuzz
+    sudo apt-get -y purge wpscan
+    sudo apt-get -y purge xsser
+    sudo apt-get -y purge zaproxy
+    sudo apt-get -y purge dnschef
+    sudo apt-get -y purge fiked
+    sudo apt-get -y purge hamster-sidejack
+    sudo apt-get -y purge hexinject
+    sudo apt-get -y purge iaxflood
+    sudo apt-get -y purge inviteflood
+    sudo apt-get -y purge ismtp
+    sudo apt-get -y purge mitmproxy
+    sudo apt-get -y purge ohrwurm
+    sudo apt-get -y purge protos-sip
+    sudo apt-get -y purge rebind
+    sudo apt-get -y purge responder
+    sudo apt-get -y purge rtpbreak
+    sudo apt-get -y purge rtpinsertsound
+    sudo apt-get -y purge rtpmixsound
+    sudo apt-get -y purge sctpscan
+    sudo apt-get -y purge sipp
+    sudo apt-get -y purge sipvicious
+    sudo apt-get -y purge sniffjoke
+    sudo apt-get -y purge sslsplit
+    sudo apt-get -y purge sslstrip
+    sudo apt-get -y purge voiphopper
+    sudo apt-get -y purge xspy
+    sudo apt-get -y purge zaproxy
+    sudo apt-get -y purge cryptcat
+    sudo apt-get -y purge cymothoa
+    sudo apt-get -y purge dbd
+    sudo apt-get -y purge dns2tcp
+    sudo apt-get -y purge http-tunnel
+    sudo apt-get -y purge httptunnel
+    sudo apt-get -y purge intersect
+    sudo apt-get -y purge nishang
+    sudo apt-get -y purge polenum
+    sudo apt-get -y purge powersploit
+    sudo apt-get -y purge pwnat
+    sudo apt-get -y purge ridenum
+    sudo apt-get -y purge sbd
+    sudo apt-get -y purge u3-pwn
+    sudo apt-get -y purge webshells
+    sudo apt-get -y purge weevely
+    sudo apt-get -y purge casefile
+    sudo apt-get -y purge cutycapt
+    sudo apt-get -y purge dos2unix
+    sudo apt-get -y purge dradis
+    sudo apt-get -y purge keepnote
+    sudo apt-get -y purge magictree
+    sudo apt-get -y purge metagoofil
+    sudo apt-get -y purge nipper-ng
+    sudo apt-get -y purge pipal
+    sudo apt-get -y purge armitage
+    sudo apt-get -y purge backdoor-factory
+    sudo apt-get -y purge beef-xss
+    sudo apt-get -y purge cisco-auditing-tool
+    sudo apt-get -y purge cisco-global-exploiter
+    sudo apt-get -y purge cisco-ocs
+    sudo apt-get -y purge cisco-torch
+    sudo apt-get -y purge crackle
+    sudo apt-get -y purge jboss-autopwn
+    sudo apt-get -y purge linux-exploit-suggester
+    sudo apt-get -y purge maltego-teeth
+    sudo apt-get -y purge shellnoob
+    sudo apt-get -y purge sqlmap
+    sudo apt-get -y purge thc-ipv6
+    sudo apt-get -y purge yersinia
+    sudo apt-get -y purge binwalk
+    sudo apt-get -y purge bulk-extractor
+    sudo apt-get -y purge chntpw
+    sudo apt-get -y purge cuckoo
+    sudo apt-get -y purge dc3dd
+    sudo apt-get -y purge ddrescue
+    sudo apt-get -y purge dumpzilla
+    sudo apt-get -y purge extundelete
+    sudo apt-get -y purge foremost
+    sudo apt-get -y purge galleta
+    sudo apt-get -y purge guymager
+    sudo apt-get -y purge iphone-backup-analyzer
+    sudo apt-get -y purge p0f
+    sudo apt-get -y purge pdf-parser
+    sudo apt-get -y purge pdfid
+    sudo apt-get -y purge pdgmail
+    sudo apt-get -y purge peepdf
+    sudo apt-get -y purge volatility
+    sudo apt-get -y purge xplico
+    sudo apt-get -y purge dhcpig
+    sudo apt-get -y purge funkload
+    sudo apt-get -y purge iaxflood
+    sudo apt-get -y purge inviteflood
+    sudo apt-get -y purge ipv6-toolkit
+    sudo apt-get -y purge mdk3
+    sudo apt-get -y purge reaver
+    sudo apt-get -y purge rtpflood
+    sudo apt-get -y purge slowhttptest
+    sudo apt-get -y purge t50
+    sudo apt-get -y purge termineter
+    sudo apt-get -y purge thc-ssl-dos
+    sudo apt-get -y purge burpsuite
+    sudo apt-get -y purge cewl
+    sudo apt-get -y purge cmospwd
+    sudo apt-get -y purge creddump
+    sudo apt-get -y purge crunch
+    sudo apt-get -y purge findmyhash
+    sudo apt-get -y purge gpp-decrypt
+    sudo apt-get -y purge hash-identifier
+    sudo apt-get -y purge hexorbase
+    sudo apt-get -y purge john
+    sudo apt-get -y purge johnny
+    sudo apt-get -y purge keimpx
+    sudo apt-get -y purge maskprocessor
+    sudo apt-get -y purge multiforcer
+    sudo apt-get -y purge ncrack
+    sudo apt-get -y purge oclgausscrack
+    sudo apt-get -y purge pack
+    sudo apt-get -y purge patator
+    sudo apt-get -y purge rainbowcrack
+    sudo apt-get -y purge rcracki-mt
+    sudo apt-get -y purge rsmangler
+    sudo apt-get -y purge statsprocessor
+    sudo apt-get -y purge thc-pptp-bruter
+    sudo apt-get -y purge truecrack
+    sudo apt-get -y purge wordlists
+    sudo apt-get -y purge dex2jar
+    sudo apt-get -y purge python-diStorm3
+    sudo apt-get -y purge edb-debugger
+    sudo apt-get -y purge jad
+    sudo apt-get -y purge javasnoop
+    sudo apt-get -y purge JD
+    sudo apt-get -y purge OllyDbg
+    sudo apt-get -y purge smali
+    sudo apt-get -y purge Valgrind
+    sudo apt-get -y purge YARA
+    sudo apt-get -y purge android-sdk
+    sudo apt-get -y purge apktool
+    sudo apt-get -y purge arduino
+    sudo apt-get -y purge sakis3g
+    sudo apt-get -y purge nikto
+    sudo apt purge
+}
+
+##Filesystem checking
+Systemcheck(){
+    echo 'install usb-storage /bin/true' >> /etc/modprobe.d/disable-usb-storage.conf
+    echo "blacklist firewire-core" >> /etc/modprobe.d/firewire.conf
+    echo "blacklist thunderbolt" >> /etc/modprobe.d/thunderbolt.conf
+}
+
+##Manual tasks
+Manual(){
+    service --status-all
+}
+
+##After
+After(){
+    restart lightdm 
+    reboot
+}
+
+exit 0
